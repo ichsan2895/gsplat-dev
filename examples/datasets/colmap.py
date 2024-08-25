@@ -192,6 +192,7 @@ class Parser:
         self.point_indices = point_indices  # Dict[str, np.ndarray], image_name -> [M,]
         self.transform = transform  # np.ndarray, (4, 4)
 
+        """
         # load one image to check the size. In the case of tanksandtemples dataset, the
         # intrinsics stored in COLMAP corresponds to 2x upsampled images.
         actual_image = imageio.imread(self.image_paths[0])[..., :3]
@@ -204,6 +205,7 @@ class Parser:
             self.Ks_dict[camera_id] = K
             width, height = self.imsize_dict[camera_id]
             self.imsize_dict[camera_id] = (int(width * s_width), int(height * s_height))
+        """
 
         # undistortion
         self.mapx_dict = dict()

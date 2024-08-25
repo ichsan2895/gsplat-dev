@@ -407,15 +407,18 @@ def _decompress_kmeans(
 
     npz_dict = np.load(os.path.join(compress_dir, f"{param_name}.npz"))
     centroids_quant = npz_dict["centroids"]
-    labels = npz_dict["labels"]
+    labels = npz_dict["labels"].astype(np.float32)
+    print(labels.dtype)
 
     centroids_norm = centroids_quant / (2 ** meta["quantization"] - 1)
     centroids_norm = torch.tensor(centroids_norm)
     mins = torch.tensor(meta["mins"])
     maxs = torch.tensor(meta["maxs"])
-    centroids = centroids_norm * (maxs - mins) + mins
+    centroids = (centroids_norm * (maxs - mins) + mins)
+    print(centroids.dtype)
 
     params = centroids[labels]
+    print(params.dtype)
     params = params.reshape(meta["shape"])
     params = params.to(dtype=getattr(torch, meta["dtype"]))
     return params
